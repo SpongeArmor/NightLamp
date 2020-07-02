@@ -72,6 +72,10 @@ int value = 0;
 const String s = "";
 
 void setup() {
+  Serial.begin(115200);
+  Serial.println();
+  Serial.println("Booting Sketch...");
+
   center.begin();
   sides.begin();
 
@@ -191,11 +195,7 @@ void publish_message(const char* topic, char* message) {
 }
 
 void setupNetwork(){
-  Serial.begin(115200);
-  Serial.println();
-  Serial.println("Booting Sketch...");
-
-  WiFi.mode(WIFI_AP_STA);
+  WiFi.mode(WIFI_STA);
   IPAddress ip(192, 168, 1, 50); //change for a static IP. Comment these 3 lines out if you want DHCP  to handle IP assignment
   IPAddress gateway(192, 168, 1, 1);
   IPAddress subnet(255, 255, 255, 0);
@@ -203,14 +203,12 @@ void setupNetwork(){
   WiFi.hostname("NightLamp");
   // WiFi.begin(ssid, password);
 
-  while (WiFi.waitForConnectResult() != WL_CONNECTED) {
+    WiFiManager wifiManager;
+    wifiManager.setAPStaticIPConfig(IPAddress(10,0,1,1), IPAddress(10,0,1,1), IPAddress(255,255,255,0));
     colorFade_sides(50, 0, 0, 0, 9);
-    WiFi.begin(ssid, password);
-    Serial.println("Attempting WiFi Connection..");
-    delay(1000);
-    colorFade_sides(0, 0, 0, 0, 9);
-    delay(1000);
-  }
+    Serial.println("Connect to \'NightLamp network\' and go to 10.0.1.1 to configure the WiFi credentials if the lamp does not connect to the existing network.");
+    wifiManager.autoConnect("NightLamp");
+    Serial.println("WiFi Configuration successful. Connected.");  
 
   colorFade_sides(0, 50, 0, 0, 9);
   delay(1000);

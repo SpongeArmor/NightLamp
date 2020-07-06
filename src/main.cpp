@@ -104,8 +104,8 @@ void loop() {
   while (WiFi.waitForConnectResult() != WL_CONNECTED) {
     colorFade_sides(50, 0, 0, 0, 9);
     Serial.println("WiFi disconnected, retrying.");
-    WiFi.begin(ssid, password);
     delay(1000);
+    WiFi.begin(ssid, password);
     colorFade_sides(0, 0, 0, 0, 9);
     delay(1000);
   }
